@@ -31,4 +31,20 @@
 #define BOLDCYAN    "\033[1m\033[36m"      /* Bold Cyan */
 #define BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
 
+#define BASE_T "\033[38;5;"
+#define BASE_B "\033[48;5;"
+
+#define	SYS_MSG_DES " \033[38;5;242m❯ \033[3m\033[38;5;242m\033[38;5;124m"
+#define	SYS_MSG_CON " \033[38;5;242m❯ \033[3m\033[38;5;242m\033[38;5;28m"
+#define	SYS_MSG "\033[38;5;242m❯ \033[3m\033[38;5;242m"
+#define	SYS_MSG_B "\033[48;5;242m❯ \033[3m\033[38;5;242m "
+#define G "\033[38;5;242m"
+#define SYS "\033[38;5;242m\033[4m\033[38;5;33m"
+#define INFO "\033[48;5;39m[ INFORMATION ]\033[0m \033[38;5;123m"
+#define BOLD "\033[1m"
+#define ITALIC "\033[3m"
+#define UNDERLINE "\033[4m"
+#define STRIKETHROUGH "\033[9m
+#define P_DEBUG "\033[48;5;202m              [ DEBUGGING ]            \033[0m"
+
 #endif

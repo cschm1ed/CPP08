@@ -1,39 +1,52 @@
-//
-// Created by Christian Schmiedt on 8/6/23.
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Span.hpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cschmied <cschmied@student.42wolfsburg.d>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/10 12:48:15 by cschmied          #+#    #+#             */
+/*   Updated: 2023/08/10 12:48:27 by cschmied         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef CPP08_SPAN_HPP
 #define CPP08_SPAN_HPP
 
 #include <iostream>
-#include <colors.hpp>
 #include <vector>
+#include <colors.hpp>
 
 class Span {
 
 public:
-	Span(unsigned int n);
-
+	Span(unsigned int const size);
 	Span(Span const &other);
-
 	~Span();
 
 	Span &operator=(Span const &rhs);
 
-	void addNumber(int);
+	void addNumber(int n);
+	void addRange(std::vector<int>::const_iterator it, std::vector<int>::const_iterator ite);
 
-	unsigned int	shortestSpan();
-	unsigned int	longestSpan();
-class spanOverflowException : public std::exception {
+	const std::vector<int> &getVec() const;
+
+	int	shortestSpan() const;
+	int	longestSpan() const;
+
+	unsigned int getCount() const;
+
+class SpanOverflowException : public std::exception {
 	const char *what() const _NOEXCEPT;
 };
 
 private:
-	Span();
-	std::vector<int> _vec;
 
-	unsigned int _size;
-	unsigned int _contains;
+	std::vector<int> _vec;
+	unsigned int	_size;
+	unsigned int	_count;
+
+	Span();
 };
 
 

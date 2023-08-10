@@ -1,66 +1,86 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Span.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cschmied <cschmied@student.42wolfsburg.d>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/10 12:48:15 by cschmied          #+#    #+#             */
+/*   Updated: 2023/08/10 12:49:00 by cschmied         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-
-#include <Span.hpp>
-
-Span::Span(unsigned int n) : _size(n), _contains(0){
-	std::cout << BLACK"Span constructor called\n"R;
-}
+#include "Span.hpp"
 
 Span::Span() {
-	std::cout << BLACK"Span default constructor called\n"R;
+	std::cout << "Span default constructor called\n";
+}
+
+Span::Span(unsigned int const size) : _size(size), _count(0) {
+	std::cout << BLACK"Span constructor called\n"R;
+	_vec.reserve(size);
 }
 
 Span::~Span() {
 	std::cout << BLACK"Span default destructor called\n"R;
 }
 
-Span::Span(Span const &other) : _vec(other._vec) {
+Span::Span(Span const &other) : _size(other._size){
 	std::cout << "Span copy constructor called\n";
 }
 
 Span &Span::operator=(Span const &rhs) {
+	_size = rhs._size;
 	_vec = rhs._vec;
 	return *this;
 }
 
-void Span::addNumber(int n) {
-	if (_contains == _size) {
-		throw spanOverflowException();
-	}
-	_vec.push_back(n);
-	_contains += 1;
+const std::vector<int> &Span::getVec() const {
+	return _vec;
 }
 
-unsigned int Span::shortestSpan() {
-	if (_size == 1) {
+unsigned int Span::getCount() const {
+	return _count;
+}
+
+void Span::addNumber(int n) {
+	if (_count == _size) {
+		throw SpanOverflowException();
+	}
+	_count ++;
+	_vec.push_back(n);
+}
+
+void Span::addRange(std::vector<int>::const_iterator it, std::vector<int>::const_iterator ite) {
+	if (_size - _count < ite - it) {
+		throw SpanOverflowException();
+	}
+	_count += ite - it;
+	_vec.insert(_vec.end(), it, ite);
+}
+
+const char *Span::SpanOverflowException::what() const throw() {
+	return "SpanOverflowException";
+}
+
+int	Span::shortestSpan() const {
+	int shortest = INT_MAX;
+	std::vector<int> sorted;
+	if (_count <= 1) {
 		return 0;
 	}
 
-	unsigned int tmp;
-	unsigned int shortest = std::numeric_limits<unsigned int>::max();
-	std::vector<int> sorted = _vec;
+	sorted = _vec;
 	std::sort(sorted.begin(), sorted.end());
-
-	std::vector<int>::const_iterator it;
+	std::vector<int>::const_iterator	it;
 	std::vector<int>::const_iterator ite = sorted.end();
-
 	for (it = sorted.begin(); it + 1 != ite; it++) {
-		tmp = *it < *(it + 1) ? *(it + 1) - *it : *it - *(it + 1);
-		if (tmp < shortest) {
-			shortest = tmp;
-		}
+		if (*(it + 1) - *it < shortest)
+			shortest = *(it + 1) - *it;
 	}
-
 	return shortest;
 }
 
-unsigned int Span::longestSpan() {
-	std::vector<int> sorted = _vec;
-
-	std::sort(sorted.begin(), sorted.end());
-	return *(sorted.end() - 1) - *sorted.begin();
-}
-
-const char *Span::spanOverflowException::what() const throw() {
-	return "cannot add number to container";
+int Span::longestSpan() const {
+	return *std::max_element(_vec.begin(), _vec.end()) -*std::min_element(_vec.begin(), _vec.end());
 }
